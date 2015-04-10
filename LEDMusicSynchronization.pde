@@ -6,14 +6,24 @@ import processing.serial.*;
 import cc.arduino.*;
 Arduino arduino;
 
+// an audio library that contains Minim, AudioInput, and some others
 import ddf.minim.analysis.*;
 import ddf.minim.*;
 
 Minim minim;
+/** in contains the data streaming to the audio input of the computer.
+For laptops, this generally means the built-in mic. For desktops, this is the
+input jack of the soundcard. There is no way for Java to change the audio input
+so the user will have to do it externally to this program.
+
+AudioInput contains three AudioBuffers: left, right and mix. left and right 
+contain the information for the left and right speakers in a stereo setup. mix
+contains the mix of the left and right samples. 
+*/
 AudioInput in;
 FFT fft;
 
-// Visualizer efaults
+// Visualizer defaults
 float valScale = 1.0;
 float maxVisible = 10.0;
 float beatThreshold = 0.25;
@@ -57,11 +67,15 @@ String arduinoMessage = "";
 
 void setup() {
 
+  // Sets the initial size of the window
   size(500, 300);
+  // makes the window resizable
   frame.setResizable(true);
   
+  // sets the background to black
   background(0);
   
+  // 
   minim = new Minim(this);
   in = minim.getLineIn(Minim.MONO,buffer_size,sample_rate);
   
